@@ -33,13 +33,46 @@
     <h2 class="text-2xl font-bold text-gray-800">Analytics</h2>
     <p class="text-gray-500 mt-2">Insights on learner progress.</p>
   
-    <div class="mt-6 bg-white rounded-xl shadow-md p-6">
-      <h3 class="text-lg font-semibold mb-4">Student Progress Overview</h3>
-      <div class="h-64 flex items-center justify-center text-gray-400">
-        📊 (Placeholder for chart visualization)
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-3">Course Performance</h3>
+        <canvas id="coursePerformanceChart"></canvas>
+      </div>
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-3">Student Completion Rates</h3>
+        <canvas id="studentCompletionChart"></canvas>
       </div>
     </div>
   </main>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Course Performance Bar Chart
+    new Chart(document.getElementById('coursePerformanceChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Intro FSL', 'Intermediate FSL', 'Advanced FSL'],
+        datasets: [{
+          label: 'Avg Score',
+          data: [85, 78, 92],
+          backgroundColor: ['#2563eb', '#3b82f6', '#60a5fa']
+        }]
+      }
+    });
+  
+    // Student Completion Pie Chart
+    new Chart(document.getElementById('studentCompletionChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Completed', 'In Progress', 'Dropped'],
+        datasets: [{
+          data: [55, 35, 10],
+          backgroundColor: ['#10b981', '#fbbf24', '#ef4444']
+        }]
+      }
+    });
+  </script>
+  
   
 
   <script src="../scripts/home.js"></script>

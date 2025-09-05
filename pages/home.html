@@ -35,21 +35,80 @@
     <h2 class="text-2xl font-bold text-gray-800">Welcome, Professor X!</h2>
     <p class="text-gray-500 mt-2">Here’s a quick overview of your teaching activity.</p>
   
+    <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
       <div class="bg-white p-6 rounded-xl shadow text-center">
         <h3 class="text-lg font-semibold">Enrolled Students</h3>
         <p class="text-3xl font-bold text-blue-700 mt-2">120</p>
+        <p class="text-sm text-gray-400">+10 this week</p>
       </div>
       <div class="bg-white p-6 rounded-xl shadow text-center">
         <h3 class="text-lg font-semibold">Active Courses</h3>
         <p class="text-3xl font-bold text-blue-700 mt-2">6</p>
+        <p class="text-sm text-gray-400">2 new added</p>
       </div>
       <div class="bg-white p-6 rounded-xl shadow text-center">
         <h3 class="text-lg font-semibold">Pending Requests</h3>
         <p class="text-3xl font-bold text-blue-700 mt-2">8</p>
+        <p class="text-sm text-gray-400">Review required</p>
       </div>
     </div>
+  
+    <!-- Charts -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="font-semibold mb-3">Student Enrollment (Monthly)</h3>
+        <canvas id="enrollmentChart"></canvas>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="font-semibold mb-3">Course Completion Rates</h3>
+        <canvas id="completionChart"></canvas>
+      </div>
+    </div>
+  
+    <!-- Activity Feed -->
+    <div class="mt-6 bg-white rounded-xl shadow p-6">
+      <h3 class="font-semibold mb-3">Recent Activity</h3>
+      <ul class="space-y-3 text-sm text-gray-700">
+        <li>✅ Angela Cruz completed <b>Intro to FSL</b></li>
+        <li>📌 Mark Dela Peña enrolled in <b>Intermediate FSL</b></li>
+        <li>📝 New course <b>FSL Grammar Basics</b> was added</li>
+        <li>👥 3 new students joined <b>Advanced FSL</b></li>
+      </ul>
+    </div>
   </main>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Enrollment Line Chart
+    new Chart(document.getElementById('enrollmentChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Enrollments',
+          data: [20, 35, 50, 70, 95, 120],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,0.2)',
+          fill: true,
+          tension: 0.3
+        }]
+      }
+    });
+  
+    // Completion Doughnut Chart
+    new Chart(document.getElementById('completionChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Completed', 'In Progress', 'Not Started'],
+        datasets: [{
+          data: [60, 30, 10],
+          backgroundColor: ['#10b981', '#facc15', '#ef4444']
+        }]
+      }
+    });
+  </script>
+  
   
 
   <script src="../scripts/home.js"></script>
