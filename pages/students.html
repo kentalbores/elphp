@@ -30,60 +30,160 @@
 
   <!-- Main Content -->
   <main class="flex-1 p-8">
-    <h2 class="text-2xl font-bold text-gray-800">Students</h2>
-    <p class="text-gray-500 mt-2">Manage and view enrolled learners.</p>
-  
-    <div class="mt-6 bg-white rounded-xl shadow-md p-6 overflow-x-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">Students</h2>
+        <p class="text-gray-500 mt-2">Manage and view enrolled learners.</p>
+      </div>
+      <button id="addStudentBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+        <span>➕</span>
+        <span>Add Student</span>
+      </button>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+      <div class="flex flex-wrap gap-4 items-center">
+        <div class="flex-1 min-w-64">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search students by name, email, or course..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+        </div>
+        <div>
+          <select id="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="all">All Status</option>
+            <option value="Active">Active</option>
+            <option value="Pending">Pending</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Students Table -->
+    <div class="bg-white rounded-xl shadow-md p-6 overflow-x-auto">
       <table class="min-w-full border border-gray-200 rounded-lg">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-4 py-2 text-left text-gray-600">Name</th>
-            <th class="px-4 py-2 text-left text-gray-600">Email</th>
-            <th class="px-4 py-2 text-left text-gray-600">Enrolled Course</th>
-            <th class="px-4 py-2 text-left text-gray-600">Progress</th>
-            <th class="px-4 py-2 text-left text-gray-600">Status</th>
+            <th class="px-4 py-3 text-left text-gray-600 font-semibold">Name</th>
+            <th class="px-4 py-3 text-left text-gray-600 font-semibold">Email</th>
+            <th class="px-4 py-3 text-left text-gray-600 font-semibold">Enrolled Course</th>
+            <th class="px-4 py-3 text-left text-gray-600 font-semibold">Progress</th>
+            <th class="px-4 py-3 text-left text-gray-600 font-semibold">Status</th>
+            <th class="px-4 py-3 text-left text-gray-600 font-semibold">Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="border-t">
-            <td class="px-4 py-2">Angela Cruz</td>
-            <td class="px-4 py-2">angela@example.com</td>
-            <td class="px-4 py-2">Intro to FSL</td>
-            <td class="px-4 py-2">
-              <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-green-500 h-2 rounded-full" style="width: 90%"></div>
-              </div>
-            </td>
-            <td class="px-4 py-2"><span class="px-2 py-1 text-xs bg-green-100 text-green-600 rounded-full">Active</span></td>
-          </tr>
-          <tr class="border-t">
-            <td class="px-4 py-2">Mark Dela Peña</td>
-            <td class="px-4 py-2">markdp@example.com</td>
-            <td class="px-4 py-2">Intermediate FSL</td>
-            <td class="px-4 py-2">
-              <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-yellow-500 h-2 rounded-full" style="width: 45%"></div>
-              </div>
-            </td>
-            <td class="px-4 py-2"><span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-600 rounded-full">Pending</span></td>
-          </tr>
-          <tr class="border-t">
-            <td class="px-4 py-2">Sophia Reyes</td>
-            <td class="px-4 py-2">sophia.r@example.com</td>
-            <td class="px-4 py-2">Advanced FSL</td>
-            <td class="px-4 py-2">
-              <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-green-500 h-2 rounded-full" style="width: 70%"></div>
-              </div>
-            </td>
-            <td class="px-4 py-2"><span class="px-2 py-1 text-xs bg-green-100 text-green-600 rounded-full">Active</span></td>
-          </tr>
+        <tbody id="studentsTableBody">
+          <!-- Dynamic content will be inserted here -->
         </tbody>
       </table>
     </div>
   </main>
+
+  <!-- Modal for Add/Edit Student -->
+  <div id="studentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 max-h-90vh overflow-y-auto">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center p-6 border-b">
+        <h3 id="modalTitle" class="text-xl font-bold text-gray-800">Add New Student</h3>
+        <button id="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+      </div>
+
+      <!-- Modal Form -->
+      <form id="studentForm" class="p-6 space-y-4">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Enter student's full name"
+          >
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Enter email address"
+          >
+        </div>
+
+        <div>
+          <label for="course" class="block text-sm font-medium text-gray-700 mb-2">Course</label>
+          <select 
+            id="course" 
+            name="course" 
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">Select a course</option>
+            <option value="Intro to FSL">Intro to FSL</option>
+            <option value="Intermediate FSL">Intermediate FSL</option>
+            <option value="Advanced FSL">Advanced FSL</option>
+            <option value="Basic Sign Language">Basic Sign Language</option>
+            <option value="Professional FSL">Professional FSL</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="progress" class="block text-sm font-medium text-gray-700 mb-2">Progress (%)</label>
+          <input 
+            type="number" 
+            id="progress" 
+            name="progress" 
+            min="0" 
+            max="100" 
+            value="0"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="0-100"
+          >
+        </div>
+
+        <div>
+          <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+          <select 
+            id="status" 
+            name="status" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="Active">Active</option>
+            <option value="Pending">Pending</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="flex justify-end space-x-3 pt-4 border-t">
+          <button 
+            type="button" 
+            id="cancelBtn"
+            class="px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+          >
+            Save Student
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
   
-  
-  <script src="../scripts/home.js"></script>
+  <!-- Scripts -->
+  <script src="../pages/scripts/students.js"></script>
 </body>
 </html>

@@ -38,31 +38,33 @@
       <div>
         <h3 class="text-lg font-semibold mb-3">Account</h3>
         <label class="block mb-2 text-sm text-gray-600">Email Notifications</label>
-        <select class="w-full border rounded-lg px-3 py-2">
-          <option>Enabled</option>
-          <option>Disabled</option>
+        <select id="emailNotifications" class="w-full border rounded-lg px-3 py-2">
+          <option value="enabled">Enabled</option>
+          <option value="disabled">Disabled</option>
         </select>
       </div>
   
       <!-- Security -->
       <div>
         <h3 class="text-lg font-semibold mb-3">Security</h3>
-        <button class="bg-blue-700 text-white px-4 py-2 rounded-lg">Change Password</button>
+        <label class="block mb-2 text-sm text-gray-600">New Password</label>
+        <input type="password" id="newPassword" class="w-full border rounded-lg px-3 py-2 mb-3" placeholder="Enter new password">
+
+        <label class="block mb-2 text-sm text-gray-600">Confirm Password</label>
+        <input type="password" id="confirmPassword" class="w-full border rounded-lg px-3 py-2 mb-3" placeholder="Confirm new password">
+
+        <button id="savePasswordBtn" class="bg-blue-700 text-white px-4 py-2 rounded-lg">Save Password</button>
       </div>
-  
-      <!-- Preferences -->
-      <div>
-        <h3 class="text-lg font-semibold mb-3">Preferences</h3>
-        <label class="block mb-2 text-sm text-gray-600">Theme</label>
-        <select class="w-full border rounded-lg px-3 py-2">
-          <option>Light</option>
-          <option>Dark</option>
-        </select>
-      </div>
+
+
+    <!-- Debug Buttons -->
+    <div class="mt-6 flex gap-3">
+      <button id="resetSettingsBtn" class="px-4 py-2 bg-red-600 text-white rounded-lg">Reset Settings</button>
     </div>
   </main>
   
 
-  <script src="../scripts/home.js"></script>
+  <script src="../pages/scripts/settings.js"></script>
+  <script src="../pages/scripts/home.js"></script>
 </body>
 </html>
