@@ -168,19 +168,7 @@ function showNotification(message, type = 'info') {
   }, 3000);
 }
 
-function initializeLogout() {
-  const logoutButton = document.getElementById('logoutButton');
-  if (logoutButton) {
-      logoutButton.addEventListener('click', function() {
-          if (confirm('Are you sure you want to logout?')) {
-              // In a real app, this would handle logout logic
-              console.log('User logged out');
-              // window.location.href = '../auth/login.html';
-              showNotification('Logged out successfully!', 'success');
-          }
-      });
-  }
-}
+
 
 // Search functionality (if search input is added)
 function initializeSearch() {
