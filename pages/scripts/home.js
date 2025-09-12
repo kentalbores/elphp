@@ -15,6 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.className = 'bg-gray-900 text-white font-sans min-h-screen flex flex-col';
+      }
+
     // Check user role and redirect if on wrong page
     checkUserAccess();
   });
@@ -46,3 +50,14 @@ function getCurrentUser() {
     const session = localStorage.getItem('signifi_user_session');
     return session ? JSON.parse(session) : null;
 }
+
+// Theme toggle function
+function toggleTheme() {
+    const body = document.body;
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    body.className = newTheme === 'light' 
+      ? 'bg-gray-100 text-gray-900 font-sans min-h-screen flex flex-col' 
+      : 'bg-gray-900 text-white font-sans min-h-screen flex flex-col';
+    localStorage.setItem('theme', newTheme);
+  }
