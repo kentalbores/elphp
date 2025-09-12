@@ -11,47 +11,91 @@
   <!-- Sidebar -->
   <div id="container"></div>
 
-  <!-- Main Content -->
+  <!-- Main -->
   <main class="flex-1 p-8">
-    <div class="max-w-3xl mx-auto bg-white rounded-xl shadow p-6">
+    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8">
+      <!-- Header -->
       <div class="flex items-center gap-6">
-        <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300">
+        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-blue-100">
           <img id="profile-avatar" src="https://via.placeholder.com/150" alt="Avatar" class="w-full h-full object-cover">
         </div>
         <div>
-          <h2 id="profile-name" class="text-2xl font-bold text-gray-800">Learner Name</h2>
+          <h2 id="profile-name" class="text-3xl font-bold text-gray-800">Learner Name</h2>
           <p id="profile-email" class="text-gray-500">email@example.com</p>
-          <button id="edit-profile-btn" class="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            Edit Profile
+          <button id="edit-profile-btn"
+            class="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
+            <i class="fa fa-pen mr-1"></i> Edit Profile
           </button>
         </div>
       </div>
 
+      <!-- Progress -->
+      <div class="mt-10">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Learning Progress</h3>
+        <p class="text-gray-600 mb-2">
+          Courses Completed: <span id="courses-completed" class="font-semibold text-gray-800">0</span>
+        </p>
+        <div class="w-full bg-gray-200 rounded-full h-3">
+          <div id="progress-bar" class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width:0%"></div>
+        </div>
+        <p class="mt-3 text-gray-700">
+          Current Level: <span id="current-level" class="font-bold text-blue-700">Beginner</span>
+        </p>
+      </div>
+
+      <!-- Achievements -->
       <div class="mt-8">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Progress</h3>
-        <div class="space-y-4">
-          <div>
-            <p class="text-gray-700">Courses Completed: <span id="courses-completed">0</span></p>
-          </div>
-          <div>
-            <p class="text-gray-700">Current Level: <span id="current-level">Beginner</span></p>
-          </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Achievements</h3>
+        <div id="achievements" class="grid grid-cols-2 gap-4">
+          <!-- Filled by JS -->
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Modal for Editing Profile -->
-  <div id="edit-profile-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 w-96">
-      <h3 class="text-xl font-bold mb-4">Edit Profile</h3>
-      <form id="edit-profile-form" class="space-y-3">
-        <input type="text" id="edit-name" placeholder="Full Name" class="w-full border p-2 rounded" required>
-        <input type="email" id="edit-email" placeholder="Email" class="w-full border p-2 rounded" required>
-        <input type="url" id="edit-avatar" placeholder="Avatar Image URL" class="w-full border p-2 rounded">
-        <div class="flex justify-end gap-2 mt-4">
-          <button type="button" id="cancel-edit" class="px-4 py-2 text-gray-500 hover:text-gray-700">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+  <!-- Edit Modal -->
+  <div id="edit-profile-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl p-6 w-96 shadow-xl transform transition-transform duration-300 scale-95">
+      <h3 class="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+        <i class="fa fa-user-edit text-blue-600"></i> Edit Profile
+      </h3>
+      
+      <form id="edit-profile-form" class="space-y-4">
+        <!-- Avatar Preview -->
+        <div class="flex flex-col items-center mb-2">
+          <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 mb-2">
+            <img id="avatar-preview" src="https://via.placeholder.com/150" alt="Avatar Preview" class="w-full h-full object-cover">
+          </div>
+          <p class="text-gray-500 text-sm">Live avatar preview</p>
+        </div>
+  
+        <!-- Name Input -->
+        <div class="relative">
+          <i class="fa fa-user absolute left-3 top-3 text-gray-400"></i>
+          <input type="text" id="edit-name" placeholder="Full Name" 
+                 class="pl-10 w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+        </div>
+  
+        <!-- Email Input -->
+        <div class="relative">
+          <i class="fa fa-envelope absolute left-3 top-3 text-gray-400"></i>
+          <input type="email" id="edit-email" placeholder="Email" 
+                 class="pl-10 w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+        </div>
+  
+        <!-- Avatar URL Input -->
+        <div class="relative">
+          <i class="fa fa-image absolute left-3 top-3 text-gray-400"></i>
+          <input type="url" id="edit-avatar" placeholder="Avatar Image URL" 
+                 class="pl-10 w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+  
+        <!-- Buttons -->
+        <div class="flex justify-end gap-3 mt-4">
+          <button type="button" id="cancel-edit" 
+                  class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 shadow">Cancel</button>
+          <button type="submit" 
+                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow">Save</button>
         </div>
       </form>
     </div>
