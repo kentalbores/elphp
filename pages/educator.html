@@ -14,7 +14,9 @@
       <h1 class="text-xl font-bold">SigniFi</h1>
     </div>
     <nav class="flex-1 px-4 py-6 space-y-2">
-      <a href="./educator.html" class="block px-3 py-2 rounded-lg bg-blue-700">Courses</a>
+      <a href="./educator.html" class="block px-3 py-2 rounded-lg bg-blue-700">📚 My Courses</a>
+      <a href="./profile.html" class="block px-3 py-2 rounded-lg hover:bg-blue-700">👤 Profile</a>
+      <a href="./settings.html" class="block px-3 py-2 rounded-lg hover:bg-blue-700">⚙️ Settings</a>
     </nav>
     <div class="px-4 py-4 border-t border-blue-700">
       <button id="logoutButton" class="w-full px-3 py-2 rounded-lg hover:bg-blue-700">🚪 Logout</button>
@@ -23,28 +25,153 @@
 
   <!-- Main Content -->
   <main class="flex-1 p-8">
-    <h2 class="text-2xl font-bold text-gray-800">Educator - Manage Courses</h2>
-  
-    <form id="courseForm" class="mt-6 bg-white shadow p-6 rounded-xl space-y-4">
-      <input id="courseTitle" type="text" placeholder="Course Title"
-             class="w-full border px-4 py-2 rounded-lg">
-      <textarea id="courseDesc" placeholder="Course Description"
-                class="w-full border px-4 py-2 rounded-lg"></textarea>
-      <button type="submit"
-              class="bg-blue-700 text-white px-4 py-2 rounded-lg">Add Course</button>
-    </form>
-  
-    <div class="mt-6">
-      <h3 class="text-lg font-semibold mb-2">Your Courses</h3>
-      <ul id="courseList" class="space-y-2">
-        <li class="p-4 bg-gray-50 border rounded-lg">Intro to FSL - <span class="text-sm text-gray-500">Beginner level</span></li>
-        <li class="p-4 bg-gray-50 border rounded-lg">Intermediate FSL - <span class="text-sm text-gray-500">With exercises</span></li>
-      </ul>
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">My Courses</h2>
+        <p class="text-gray-500 mt-2">Create and manage your FSL courses</p>
+      </div>
+      <button id="addCourseBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+        <span>➕</span>
+        <span>Create Course</span>
+      </button>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+      <div class="flex flex-wrap gap-4 items-center">
+        <div class="flex-1 min-w-64">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search your courses..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+        </div>
+        <div>
+          <select id="levelFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="all">All Levels</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Courses Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="coursesGrid">
+      <!-- Dynamic content will be loaded here -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="text-center py-12 hidden">
+      <div class="text-gray-400 text-6xl mb-4">📚</div>
+      <h3 class="text-xl font-semibold text-gray-600 mb-2">No Courses Created</h3>
+      <p class="text-gray-500 mb-4">Start creating your first FSL course to share your knowledge!</p>
+      <button id="createFirstCourse" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+        Create Your First Course
+      </button>
     </div>
   </main>
   
+  <!-- Modal for Add/Edit Course -->
+  <div id="courseModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-4 max-h-90vh overflow-y-auto">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center p-6 border-b">
+        <h3 id="modalTitle" class="text-xl font-bold text-gray-800">Create New Course</h3>
+        <button id="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+      </div>
 
-  <script src="../pages/scripts/courses.js"></script>
+      <!-- Modal Form -->
+      <form id="courseForm" class="p-6 space-y-4">
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Course Title</label>
+          <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Enter course title"
+          >
+        </div>
+
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <textarea 
+            id="description" 
+            name="description" 
+            required
+            rows="3"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Describe what students will learn"
+          ></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="level" class="block text-sm font-medium text-gray-700 mb-2">Level</label>
+            <select 
+              id="level" 
+              name="level" 
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Select level</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="duration" class="block text-sm font-medium text-gray-700 mb-2">Duration</label>
+            <input 
+              type="text" 
+              id="duration" 
+              name="duration" 
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="e.g., 6 hrs"
+            >
+          </div>
+        </div>
+
+        <div>
+          <label for="instructor" class="block text-sm font-medium text-gray-700 mb-2">Instructor Name</label>
+          <input 
+            type="text" 
+            id="instructor" 
+            name="instructor" 
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Your name or instructor name"
+          >
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="flex justify-end space-x-3 pt-4 border-t">
+          <button 
+            type="button" 
+            id="cancelBtn"
+            class="px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+          >
+            Save Course
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../pages/scripts/educator.js"></script>
   <script src="../pages/scripts/home.js"></script>
 </body>
 </html>

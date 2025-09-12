@@ -89,8 +89,14 @@ class AuthManager {
         const isAuthPage = currentPath.includes('index.html') || currentPath.includes('register.html') || currentPath === '/';
         
         if (this.currentUser && isAuthPage) {
-            // User is logged in but on auth page, redirect to dashboard
-            window.location.href = './pages/home.html';
+            // User is logged in but on auth page, redirect based on role
+            if (this.currentUser.role === 'teacher') {
+                window.location.href = './pages/educator.html';
+            } else if (this.currentUser.role === 'student') {
+                window.location.href = './pages/learner.html';
+            } else {
+                window.location.href = './pages/home.html';
+            }
         } else if (!this.currentUser && !isAuthPage && !currentPath.includes('index.html')) {
             // User is not logged in but on protected page, redirect to login
             window.location.href = '../index.html';
@@ -168,13 +174,6 @@ class AuthManager {
 
     // Handle login
     handleLogin(email, password) {
-        // TODO: Replace with API call
-        // const response = await fetch('/api/auth/login', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ email, password })
-        // });
-
         const user = this.users.find(u => u.email === email && u.password === password);
         
         if (user) {
@@ -182,7 +181,15 @@ class AuthManager {
             this.showMessage('Login successful! Redirecting...', 'success');
             
             setTimeout(() => {
-                window.location.href = './pages/home.html';
+                // Redirect based on user role
+                if (user.role === 'teacher') {
+                    window.location.href = './pages/educator.html';
+                } else if (user.role === 'student') {
+                    window.location.href = './pages/learner.html';
+                } else {
+                    // Default fallback
+                    window.location.href = './pages/home.html';
+                }
             }, 1500);
         } else {
             this.showMessage('Invalid email or password. Please try again.', 'error');
@@ -239,7 +246,14 @@ class AuthManager {
         this.showMessage('Account created successfully! You can now sign in.', 'success');
         
         setTimeout(() => {
-            window.location.href = '../index.html';
+            // Redirect to appropriate page after registration
+            if (newUser.role === 'teacher') {
+                window.location.href = './educator.html';
+            } else if (newUser.role === 'student') {
+                window.location.href = './learner.html';
+            } else {
+                window.location.href = '../index.html';
+            }
         }, 2000);
     }
 
