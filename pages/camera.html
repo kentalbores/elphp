@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SigniFi - Hand Gesture Recognition</title>
+  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+
+  <!-- Sidebar placeholder -->
+  <div id="container"></div>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-8">
+    <h2 class="text-2xl font-bold text-gray-800">Hand Gesture Recognition</h2>
+    <p class="text-gray-500 mt-2">Real-time hand gesture and sign language detection using MediaPipe.</p>
+  
+    <div class="mt-6 bg-white rounded-xl shadow-md p-6 space-y-6">
+      <!-- Camera Section -->
+      <div>
+        <h3 class="text-lg font-semibold mb-3">Camera Preview</h3>
+        <div class="relative">
+          <video id="camera" autoplay playsinline muted class="w-full max-w-2xl rounded-lg shadow-md bg-black"></video>
+          <canvas id="output" class="absolute top-0 left-0 w-full max-w-2xl rounded-lg"></canvas>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex gap-3 flex-wrap">
+        <button id="startCameraBtn" class="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800">Start Camera</button>
+        <button id="stopCameraBtn" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" disabled>Stop Camera</button>
+        <button id="toggleMirrorBtn" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Toggle Mirror</button>
+      </div>
+
+      <!-- Detection Info -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-semibold mb-2">Hand Detection</h4>
+          <div id="handInfo" class="text-sm text-gray-600">No hands detected</div>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-semibold mb-2">Gesture Recognition</h4>
+          <div id="gestureInfo" class="text-sm text-gray-600">No gesture detected</div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="border-t pt-4">
+        <h4 class="font-semibold mb-3">Detection Settings</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Detection Confidence</label>
+            <input type="range" id="detectionConfidence" min="0.1" max="1" step="0.1" value="0.7" class="w-full">
+            <span id="detectionValue" class="text-sm text-gray-600">0.7</span>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tracking Confidence</label>
+            <input type="range" id="trackingConfidence" min="0.1" max="1" step="0.1" value="0.5" class="w-full">
+            <span id="trackingValue" class="text-sm text-gray-600">0.5</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    // Global variables
+    let camera = null;
+    let hands = null;
+    let stream = null;
+    let isRunning = false;
+    let mirrorVideo = true;
+    
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('output');
+    const ctx = canvas.getContext('2d');
+    const startBtn = document.getElementById('startCameraBtn');
+    const stopBtn = document.getElementById('stopCameraBtn');
+    const mirrorBtn = document.getElementById('toggleMirrorBtn');
+    const handInfo = document.getElementById('handInfo');
+    const gestureInfo = document.getElementById('gestureInfo');
+    const detectionSlider = document.getElementById('detectionConfidence');
+    const trackingSlider = document.getElementById('trackingConfidence');
+    const detectionValue = document.getElementById('detectionValue');
+    const trackingValue = document.getElementById('trackingValue');
+
+    // Gesture history for smoothing
+    let gestureHistory = [];
+    const historyLength = 5;
+
+    // Initialize MediaPipe Hands
+    function initializeHands() {
+      hands = new Hands({
+        locateFile: (file) => {
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+        }
+      });
+
+      hands.setOptions({
+        maxNumHands: 2,
+        modelComplexity: 1,
+        minDetectionConfidence: parseFloat(detectionSlider.value),
+        minTrackingConfidence: parseFloat(trackingSlider.value),
+        staticImageMode: false,
+      });
+
+      hands.onResults(onResults);
+    }
+
+    // Process MediaPipe results
+    function onResults(results) {
+      // Clear canvas
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Save context for mirroring
+      ctx.save();
+      if (mirrorVideo) {
+        ctx.scale(-1, 1);
+        ctx.translate(-canvas.width, 0);
+      }
+
+      // Draw landmarks and connections
+      if (results.multiHandLandmarks && results.multiHandedness) {
+        let handCount = 0;
+        let detectedGestures = [];
+
+        for (let i = 0; i < results.multiHandLandmarks.length; i++) {
+          const landmarks = results.multiHandLandmarks[i];
+          const handedness = results.multiHandedness[i];
+          
+          handCount++;
+          
+          // Draw hand landmarks
+          drawLandmarks(ctx, landmarks, handedness);
+          
+          // Recognize gesture
+          const gesture = recognizeGesture(landmarks);
+          if (gesture) {
+            detectedGestures.push(`${handedness.label}: ${gesture}`);
+          }
+        }
+
+        // Update UI
+        handInfo.textContent = `${handCount} hand(s) detected`;
+        
+        // Smooth gesture recognition
+        if (detectedGestures.length > 0) {
+          gestureHistory.push(detectedGestures.join(', '));
+          if (gestureHistory.length > historyLength) {
+            gestureHistory.shift();
+          }
+          
+          // Find most common gesture
+          const mostCommon = getMostCommonGesture(gestureHistory);
+          gestureInfo.textContent = mostCommon;
+        } else {
+          gestureInfo.textContent = 'No gesture detected';
+        }
+      } else {
+        handInfo.textContent = 'No hands detected';
+        gestureInfo.textContent = 'No gesture detected';
+      }
+
+      ctx.restore();
+    }
+
+    // Draw hand landmarks and connections
+    function drawLandmarks(ctx, landmarks, handedness) {
+      // Hand connections (based on MediaPipe hand model)
+      const connections = [
+        [0, 1], [1, 2], [2, 3], [3, 4], // Thumb
+        [0, 5], [5, 6], [6, 7], [7, 8], // Index
+        [5, 9], [9, 10], [10, 11], [11, 12], // Middle
+        [9, 13], [13, 14], [14, 15], [15, 16], // Ring
+        [13, 17], [17, 18], [18, 19], [19, 20], // Pinky
+        [0, 17] // Palm
+      ];
+
+      const width = canvas.width;
+      const height = canvas.height;
+
+      // Draw connections
+      ctx.strokeStyle = handedness.label === 'Left' ? '#ff6b6b' : '#4ecdc4';
+      ctx.lineWidth = 2;
+      
+      connections.forEach(([start, end]) => {
+        const startPoint = landmarks[start];
+        const endPoint = landmarks[end];
+        
+        ctx.beginPath();
+        ctx.moveTo(startPoint.x * width, startPoint.y * height);
+        ctx.lineTo(endPoint.x * width, endPoint.y * height);
+        ctx.stroke();
+      });
+
+      // Draw landmarks
+      ctx.fillStyle = handedness.label === 'Left' ? '#ff6b6b' : '#4ecdc4';
+      landmarks.forEach((landmark, index) => {
+        const x = landmark.x * width;
+        const y = landmark.y * height;
+        
+        ctx.beginPath();
+        ctx.arc(x, y, index === 4 || index === 8 || index === 12 || index === 16 || index === 20 ? 6 : 4, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        // Add white border
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+    }
+
+    // Basic gesture recognition
+    function recognizeGesture(landmarks) {
+      // Convert landmarks to relative coordinates
+      const processedLandmarks = preProcessLandmarks(landmarks);
+      
+      // Simple gesture recognition based on finger positions
+      const fingers = getFingersUp(landmarks);
+      
+      // Recognize basic gestures
+      if (fingers.every(f => f === 1)) return 'Open Hand';
+      if (fingers.every(f => f === 0)) return 'Fist';
+      if (fingers[1] === 1 && fingers.slice(2).every(f => f === 0)) return 'Pointing';
+      if (fingers[1] === 1 && fingers[2] === 1 && fingers.slice(3).every(f => f === 0)) return 'Peace';
+      if (fingers[0] === 1 && fingers[4] === 1 && fingers.slice(1, 4).every(f => f === 0)) return 'Rock On';
+      if (fingers[0] === 1 && fingers.slice(1).every(f => f === 0)) return 'Thumbs Up';
+      
+      return 'Unknown';
+    }
+
+    // Preprocess landmarks (similar to Python version)
+    function preProcessLandmarks(landmarks) {
+      const processed = landmarks.map(point => [point.x, point.y]);
+      
+      // Convert to relative coordinates
+      const baseX = processed[0][0];
+      const baseY = processed[0][1];
+      
+      for (let i = 0; i < processed.length; i++) {
+        processed[i][0] -= baseX;
+        processed[i][1] -= baseY;
+      }
+      
+      // Flatten and normalize
+      const flattened = processed.flat();
+      const maxValue = Math.max(...flattened.map(Math.abs));
+      
+      return flattened.map(val => val / maxValue);
+    }
+
+    // Determine which fingers are up
+    function getFingersUp(landmarks) {
+      const fingers = [0, 0, 0, 0, 0];
+      
+      // Thumb
+      if (landmarks[4].x > landmarks[3].x) fingers[0] = 1;
+      
+      // Other fingers
+      const fingerTips = [8, 12, 16, 20];
+      const fingerPips = [6, 10, 14, 18];
+      
+      for (let i = 0; i < fingerTips.length; i++) {
+        if (landmarks[fingerTips[i]].y < landmarks[fingerPips[i]].y) {
+          fingers[i + 1] = 1;
+        }
+      }
+      
+      return fingers;
+    }
+
+    // Get most common gesture from history
+    function getMostCommonGesture(history) {
+      const counts = {};
+      history.forEach(gesture => {
+        counts[gesture] = (counts[gesture] || 0) + 1;
+      });
+      
+      return Object.keys(counts).reduce((a, b) => 
+        counts[a] > counts[b] ? a : b
+      );
+    }
+
+    // Camera functions
+    async function startCamera() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            width: 1280, 
+            height: 720,
+            facingMode: 'user'
+          } 
+        });
+        
+        video.srcObject = stream;
+        
+        // Initialize camera utils
+        camera = new Camera(video, {
+          onFrame: async () => {
+            if (hands) {
+              await hands.send({ image: video });
+            }
+          },
+          width: 1280,
+          height: 720
+        });
+        
+        await camera.start();
+        isRunning = true;
+        
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        
+      } catch (err) {
+        console.error('Error accessing camera:', err);
+        alert('Could not access camera. Please check permissions.');
+      }
+    }
+
+    function stopCamera() {
+      if (camera) {
+        camera.stop();
+        camera = null;
+      }
+      
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+      }
+      
+      isRunning = false;
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      handInfo.textContent = 'Camera stopped';
+      gestureInfo.textContent = 'No gesture detected';
+    }
+
+    function toggleMirror() {
+      mirrorVideo = !mirrorVideo;
+      mirrorBtn.textContent = mirrorVideo ? 'Toggle Mirror' : 'Mirror: OFF';
+    }
+
+    // Event listeners
+    startBtn.addEventListener('click', startCamera);
+    stopBtn.addEventListener('click', stopCamera);
+    mirrorBtn.addEventListener('click', toggleMirror);
+
+    // Settings sliders
+    detectionSlider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      detectionValue.textContent = value;
+      if (hands) {
+        hands.setOptions({ minDetectionConfidence: value });
+      }
+    });
+
+    trackingSlider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      trackingValue.textContent = value;
+      if (hands) {
+        hands.setOptions({ minTrackingConfidence: value });
+      }
+    });
+
+    // Initialize on page load
+    window.addEventListener('load', () => {
+      initializeHands();
+    });
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (isRunning) {
+        stopCamera();
+      }
+    });
+  </script>
+  <script src="../pages/scripts/sidebar.js"></script>
+</body>
+</html>

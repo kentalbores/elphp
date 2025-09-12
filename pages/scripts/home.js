@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 // In a real app, this would handle logout logic
                 console.log('User logged out');
-                window.location.href = "../index.html";
+                window.location.href = "../../index.html";
             }
         });
     }
