@@ -1,459 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>SigniFi - Hand Gesture Recognition</title>
-  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <!-- TensorFlow.js -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
-  <!-- MediaPipe Hands -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js"></script>
+  <meta charset="utf-8">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils@0.1/control_utils.css" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="demo.css" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.1/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils@0.1/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.2/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.1/hands.js" crossorigin="anonymous"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex">
 
-  <!-- Sidebar placeholder -->
-  <div id="container" class="w-64 bg-white shadow-lg">
-    <div class="p-4">
-      <h1 class="text-xl font-bold">SigniFi</h1>
-      <nav class="mt-4">
-        <a href="#" class="block p-2 text-blue-600 bg-blue-50 rounded">Camera</a>
-      </nav>
-    </div>
-  </div>
+<body>
+  <div id="container"></div>
 
-  <!-- Main Content -->
-  <main class="flex-1 p-8">
-    <h2 class="text-2xl font-bold text-gray-800">Hand Gesture Recognition</h2>
-    <p class="text-gray-500 mt-2">Real-time hand landmark detection and gesture classification using MediaPipe and TensorFlow.js</p>
-  
-    <div class="mt-6 bg-white rounded-xl shadow-md p-6 space-y-6">
-      <!-- Camera Section -->
-      <div>
-        <h3 class="text-lg font-semibold mb-3">Camera Preview</h3>
-        <div class="relative inline-block">
-          <video id="video" autoplay playsinline muted class="rounded-lg shadow-md bg-black" style="transform: scaleX(-1); width: 640px; height: 480px;"></video>
-          <canvas id="canvas" class="absolute top-0 left-0 rounded-lg pointer-events-none" width="640" height="480" style="transform: scaleX(-1);"></canvas>
-        </div>
-      </div>
+  <!-- CONTENTS -->
+  <div class="container" style="margin-top: 20px;">
 
-      <!-- Controls -->
-      <div class="flex gap-3 flex-wrap">
-        <button id="startBtn" class="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800">Start Detection</button>
-        <button id="stopBtn" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 opacity-50 cursor-not-allowed" disabled>Stop</button>
-        <button id="captureBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 opacity-50 cursor-not-allowed" disabled>Capture</button>
-      </div>
-
-      <!-- Status and Detection Info -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-gray-50 p-4 rounded-lg">
-          <h4 class="font-semibold mb-2 text-blue-600">System Status</h4>
-          <div id="statusInfo" class="text-sm text-gray-700">Initializing...</div>
-        </div>
-        <div class="bg-gray-50 p-4 rounded-lg">
-          <h4 class="font-semibold mb-2 text-green-600">Hand Detection</h4>
-          <div id="handInfo" class="text-sm text-gray-700">No hands detected</div>
-        </div>
-        <div class="bg-gray-50 p-4 rounded-lg">
-          <h4 class="font-semibold mb-2 text-purple-600">Performance</h4>
-          <div id="performanceInfo" class="text-sm text-gray-700">0 FPS</div>
-        </div>
-      </div>
-
-      <!-- Gesture Recognition Results -->
-      <div class="bg-blue-50 p-4 rounded-lg">
-        <h4 class="font-semibold mb-2 text-blue-700">Recognized Gestures</h4>
-        <div id="gestureResults" class="text-sm text-gray-700">Ready for detection...</div>
-      </div>
-
-      <!-- Settings -->
-      <div class="border-t pt-4">
-        <h4 class="font-semibold mb-3">Detection Settings</h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Detection Confidence: <span id="detectionValue">0.7</span></label>
-            <input type="range" id="detectionConfidence" min="0.1" max="1" step="0.1" value="0.7" class="w-full">
+    <div class="columns">
+      
+      <!-- WEBCAM INPUT -->
+      <div class="column">
+        <article class="panel is-info">
+          <p class="panel-heading">
+            Webcam Input
+          </p>
+          <div class="panel-block">
+            <video class="input_video3"></video>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Tracking Confidence: <span id="trackingValue">0.5</span></label>
-            <input type="range" id="trackingConfidence" min="0.1" max="1" step="0.1" value="0.5" class="w-full">
-          </div>
-        </div>
+        </article>
       </div>
 
-      <!-- Capture Section -->
-      <div id="captureSection" class="hidden">
-        <h3 class="text-lg font-semibold mb-3">Captured Frame</h3>
-        <canvas id="snapshot" class="rounded-lg shadow border"></canvas>
+      <!-- MEDIAPIPE OUTPUT -->
+      <div class="column">
+        <article class="panel is-info">
+          <p class="panel-heading">
+            Mediapipe Hands Detection
+          </p>
+          <div class="panel-block">
+            <canvas class="output3" width="480px" height="480px"></canvas>
+          </div>
+        </article>
       </div>
     </div>
-  </main>
-  
-  <script>
-    class HandGestureRecognition {
-      constructor() {
-        this.video = document.getElementById('video');
-        this.canvas = document.getElementById('canvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.snapshot = document.getElementById('snapshot');
-        this.snapshotCtx = this.snapshot.getContext('2d');
-        
-        this.hands = null;
-        this.camera = null;
-        this.isRunning = false;
-        this.lastTime = 0;
-        this.frameCount = 0;
-        this.fps = 0;
-        
-        // UI elements
-        this.statusInfo = document.getElementById('statusInfo');
-        this.handInfo = document.getElementById('handInfo');
-        this.performanceInfo = document.getElementById('performanceInfo');
-        this.gestureResults = document.getElementById('gestureResults');
-        this.captureSection = document.getElementById('captureSection');
-        
-        // Controls
-        this.startBtn = document.getElementById('startBtn');
-        this.stopBtn = document.getElementById('stopBtn');
-        this.captureBtn = document.getElementById('captureBtn');
-        
-        // Settings
-        this.detectionSlider = document.getElementById('detectionConfidence');
-        this.trackingSlider = document.getElementById('trackingConfidence');
-        this.detectionValue = document.getElementById('detectionValue');
-        this.trackingValue = document.getElementById('trackingValue');
-        
-        // Gesture history for smoothing
-        this.gestureHistory = [];
-        this.maxHistory = 10;
-        
-        this.init();
-      }
-
-      async init() {
-        try {
-          this.updateStatus('Loading MediaPipe...');
-          
-          // Check if MediaPipe is available
-          if (typeof Hands === 'undefined') {
-            throw new Error('MediaPipe Hands not loaded');
-          }
-
-          // Initialize MediaPipe Hands
-          this.hands = new Hands({
-            locateFile: (file) => {
-              return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/${file}`;
-            }
-          });
-
-          this.hands.setOptions({
-            maxNumHands: 2,
-            modelComplexity: 1,
-            minDetectionConfidence: 0.7,
-            minTrackingConfidence: 0.5,
-            staticImageMode: false,
-          });
-
-          this.hands.onResults(this.onResults.bind(this));
-          
-          this.updateStatus('MediaPipe loaded successfully. Ready to start.');
-          this.setupEventListeners();
-          
-        } catch (error) {
-          console.error('Initialization error:', error);
-          this.updateStatus(`Initialization failed: ${error.message}`);
-        }
-      }
-
-      setupEventListeners() {
-        this.startBtn.addEventListener('click', () => this.start());
-        this.stopBtn.addEventListener('click', () => this.stop());
-        this.captureBtn.addEventListener('click', () => this.capture());
-        
-        // Settings
-        this.detectionSlider.addEventListener('input', (e) => {
-          const value = parseFloat(e.target.value);
-          this.detectionValue.textContent = value;
-          if (this.hands) {
-            this.hands.setOptions({ minDetectionConfidence: value });
-          }
-        });
-        
-        this.trackingSlider.addEventListener('input', (e) => {
-          const value = parseFloat(e.target.value);
-          this.trackingValue.textContent = value;
-          if (this.hands) {
-            this.hands.setOptions({ minTrackingConfidence: value });
-          }
-        });
-      }
-
-      async start() {
-        try {
-          this.updateStatus('Requesting camera access...');
-          
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              width: 640,
-              height: 480,
-              facingMode: 'user'
-            }
-          });
-
-          this.video.srcObject = stream;
-          this.updateStatus('Camera started. Waiting for video...');
-
-          this.video.addEventListener('loadeddata', () => {
-            this.updateStatus('Video loaded. Starting hand detection...');
-            this.isRunning = true;
-            this.lastTime = performance.now();
-            this.processFrame();
-            this.updateButtons(true);
-          });
-
-        } catch (error) {
-          console.error('Camera error:', error);
-          this.updateStatus(`Camera error: ${error.message}`);
-        }
-      }
-
-      stop() {
-        this.isRunning = false;
-        
-        if (this.video.srcObject) {
-          this.video.srcObject.getTracks().forEach(track => track.stop());
-          this.video.srcObject = null;
-        }
-        
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.updateStatus('Detection stopped');
-        this.handInfo.textContent = 'No hands detected';
-        this.gestureResults.textContent = 'Detection stopped';
-        this.updateButtons(false);
-      }
-
-      async processFrame() {
-        if (!this.isRunning) return;
-        
-        if (this.video.readyState >= 2) {
-          await this.hands.send({ image: this.video });
-          this.calculateFPS();
-        }
-        
-        if (this.isRunning) {
-          requestAnimationFrame(() => this.processFrame());
-        }
-      }
-
-      onResults(results) {
-        // Clear canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Update hand detection info
-        const numHands = results.multiHandLandmarks ? results.multiHandLandmarks.length : 0;
-        this.handInfo.textContent = numHands > 0 ? `${numHands} hand(s) detected` : 'No hands detected';
-        
-        let detectedGestures = [];
-        
-        if (results.multiHandLandmarks && results.multiHandedness) {
-          for (let i = 0; i < results.multiHandLandmarks.length; i++) {
-            const landmarks = results.multiHandLandmarks[i];
-            const handedness = results.multiHandedness[i];
-            
-            // Draw hand landmarks
-            this.drawLandmarks(landmarks, handedness);
-            
-            // Recognize gesture
-            const gesture = this.recognizeGesture(landmarks);
-            detectedGestures.push(`${handedness.classification[0].label}: ${gesture}`);
-          }
-        }
-        
-        // Update gesture results with smoothing
-        if (detectedGestures.length > 0) {
-          this.gestureHistory.push(detectedGestures.join(', '));
-          if (this.gestureHistory.length > this.maxHistory) {
-            this.gestureHistory.shift();
-          }
-          
-          // Show most recent gesture
-          this.gestureResults.textContent = detectedGestures.join(' | ');
-        } else if (numHands === 0) {
-          this.gestureResults.textContent = 'No hands detected';
-        }
-      }
-
-      drawLandmarks(landmarks, handedness) {
-        const width = this.canvas.width;
-        const height = this.canvas.height;
-        
-        // Hand connections (MediaPipe hand model)
-        const connections = [
-          [0, 1], [1, 2], [2, 3], [3, 4], // Thumb
-          [0, 5], [5, 6], [6, 7], [7, 8], // Index
-          [5, 9], [9, 10], [10, 11], [11, 12], // Middle
-          [9, 13], [13, 14], [14, 15], [15, 16], // Ring
-          [13, 17], [17, 18], [18, 19], [19, 20], // Pinky
-          [0, 17], [2, 5], [5, 9], [9, 13], [13, 17] // Palm
-        ];
-        
-        // Draw connections
-        this.ctx.strokeStyle = handedness.classification[0].label === 'Left' ? '#FF6B6B' : '#4ECDC4';
-        this.ctx.lineWidth = 3;
-        
-        connections.forEach(([start, end]) => {
-          const startPoint = landmarks[start];
-          const endPoint = landmarks[end];
-          
-          this.ctx.beginPath();
-          this.ctx.moveTo(startPoint.x * width, startPoint.y * height);
-          this.ctx.lineTo(endPoint.x * width, endPoint.y * height);
-          this.ctx.stroke();
-        });
-        
-        // Draw landmarks
-        landmarks.forEach((landmark, index) => {
-          const x = landmark.x * width;
-          const y = landmark.y * height;
-          
-          // Different colors for different parts
-          if (index === 0) { // Wrist
-            this.ctx.fillStyle = '#FF0000';
-          } else if ([4, 8, 12, 16, 20].includes(index)) { // Fingertips
-            this.ctx.fillStyle = '#00FF00';
-          } else {
-            this.ctx.fillStyle = handedness.classification[0].label === 'Left' ? '#FF6B6B' : '#4ECDC4';
-          }
-          
-          this.ctx.beginPath();
-          this.ctx.arc(x, y, [4, 8, 12, 16, 20].includes(index) ? 6 : 4, 0, 2 * Math.PI);
-          this.ctx.fill();
-          
-          // White border
-          this.ctx.strokeStyle = 'white';
-          this.ctx.lineWidth = 1;
-          this.ctx.stroke();
-        });
-      }
-
-      recognizeGesture(landmarks) {
-        // Simple gesture recognition based on finger positions
-        const fingers = this.getFingersUp(landmarks);
-        
-        // Count extended fingers
-        const fingerCount = fingers.reduce((sum, finger) => sum + finger, 0);
-        
-        // Basic gesture patterns
-        if (fingerCount === 0) return 'Fist';
-        if (fingerCount === 5) return 'Open Hand';
-        if (fingerCount === 1 && fingers[1] === 1) return 'Pointing';
-        if (fingerCount === 2 && fingers[1] === 1 && fingers[2] === 1) return 'Peace Sign';
-        if (fingerCount === 1 && fingers[0] === 1) return 'Thumbs Up';
-        if (fingerCount === 2 && fingers[0] === 1 && fingers[4] === 1) return 'Rock On';
-        if (fingerCount === 3 && fingers[0] === 1 && fingers[1] === 1 && fingers[2] === 1) return 'OK Sign';
-        
-        return `${fingerCount} fingers`;
-      }
-
-      getFingersUp(landmarks) {
-        const fingers = [0, 0, 0, 0, 0];
-        
-        // Thumb (check x-coordinate)
-        if (landmarks[4].x > landmarks[3].x) fingers[0] = 1;
-        
-        // Other fingers (check y-coordinate)
-        const fingerTips = [8, 12, 16, 20];
-        const fingerPips = [6, 10, 14, 18];
-        
-        for (let i = 0; i < fingerTips.length; i++) {
-          if (landmarks[fingerTips[i]].y < landmarks[fingerPips[i]].y) {
-            fingers[i + 1] = 1;
-          }
-        }
-        
-        return fingers;
-      }
-
-      calculateFPS() {
-        const now = performance.now();
-        this.frameCount++;
-        
-        if (now - this.lastTime >= 1000) {
-          this.fps = Math.round(this.frameCount * 1000 / (now - this.lastTime));
-          this.performanceInfo.textContent = `${this.fps} FPS`;
-          this.frameCount = 0;
-          this.lastTime = now;
-        }
-      }
-
-      capture() {
-        if (!this.isRunning) return;
-        
-        this.snapshot.width = this.video.videoWidth || 640;
-        this.snapshot.height = this.video.videoHeight || 480;
-        
-        // Draw mirrored video frame
-        this.snapshotCtx.save();
-        this.snapshotCtx.scale(-1, 1);
-        this.snapshotCtx.translate(-this.snapshot.width, 0);
-        this.snapshotCtx.drawImage(this.video, 0, 0);
-        this.snapshotCtx.restore();
-        
-        // Draw landmarks on snapshot
-        this.snapshotCtx.drawImage(this.canvas, 0, 0);
-        
-        this.captureSection.classList.remove('hidden');
-        this.captureSection.scrollIntoView({ behavior: 'smooth' });
-      }
-
-      updateButtons(running) {
-        if (running) {
-          this.startBtn.disabled = true;
-          this.startBtn.classList.add('opacity-50', 'cursor-not-allowed');
-          this.stopBtn.disabled = false;
-          this.stopBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-          this.captureBtn.disabled = false;
-          this.captureBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-        } else {
-          this.startBtn.disabled = false;
-          this.startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-          this.stopBtn.disabled = true;
-          this.stopBtn.classList.add('opacity-50', 'cursor-not-allowed');
-          this.captureBtn.disabled = true;
-          this.captureBtn.classList.add('opacity-50', 'cursor-not-allowed');
-        }
-      }
-
-      updateStatus(message) {
-        this.statusInfo.textContent = message;
-        console.log('Status:', message);
-      }
-    }
-
-    // Initialize the application
-    let app;
     
-    // Wait for DOM and scripts to load
-    window.addEventListener('load', () => {
-      // Check for required libraries
-      if (typeof tf === 'undefined') {
-        document.getElementById('statusInfo').textContent = 'TensorFlow.js not loaded';
-        return;
-      }
-      
-      if (typeof Hands === 'undefined') {
-        document.getElementById('statusInfo').textContent = 'MediaPipe Hands not loaded';
-        return;
-      }
-      
-      app = new HandGestureRecognition();
-    });
-
-    // Cleanup on page unload
-    window.addEventListener('beforeunload', () => {
-      if (app && app.isRunning) {
-        app.stop();
-      }
-    });
-  </script>
+    <div class="loading">
+      <div class="spinner"></div>
+    </div>
+  <div style="visibility: hidden;" class="control3">
+  </div>
+  <script src="../pages/scripts/sidebar.js"></script>
+  <script type="text/javascript" src="../pages/scripts/hands.js"></script>
 </body>
 </html>
