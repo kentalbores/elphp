@@ -351,12 +351,3 @@ class StudentsManager {
 document.addEventListener('DOMContentLoaded', () => {
     window.studentsManager = new StudentsManager();
 });
-
-// Logout functionality
-document.getElementById('logoutButton')?.addEventListener('click', () => {
-    if (confirm('Are you sure you want to logout?')) {
-        // TODO: Implement proper logout with backend
-        localStorage.removeItem('signifi_user_session');
-        window.location.href = '../login.html';
-    }
-});

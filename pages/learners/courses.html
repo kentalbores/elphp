@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SigniFi - Courses</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+
+  <!-- Sidebar -->
+  <div id="container"></div>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-8">
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">Courses</h2>
+        <p class="text-gray-500 mt-2" id="course-count">All Courses (8)</p>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <!-- Create Course Button -->
+        <button id="create-course-btn"
+          class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+          + Create Course
+        </button>
+
+        <!-- Search -->
+        <div class="relative">
+          <input id="search-input" type="text" placeholder="Search courses..."
+            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <div class="absolute left-3 top-2.5 text-gray-400">🔍</div>
+        </div>
+
+        <!-- Sort -->
+        <select id="sort-select"
+          class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="name">Sort by Name</option>
+          <option value="rating">Sort by Rating</option>
+          <option value="enrolled">Sort by Popularity</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex flex-wrap gap-3 mb-6">
+      <button class="filter-btn px-4 py-2 rounded-full bg-blue-600 text-white text-sm hover:bg-blue-700"
+        data-filter="all">All</button>
+      <button class="filter-btn px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm hover:bg-blue-200"
+        data-filter="beginner">Beginner</button>
+      <button class="filter-btn px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm hover:bg-blue-200"
+        data-filter="intermediate">Intermediate</button>
+      <button class="filter-btn px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm hover:bg-blue-200"
+        data-filter="advanced">Advanced</button>
+    </div>
+
+    <!-- Courses Grid -->
+    <div id="all-courses" class="courses-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Existing course cards here -->
+      <!-- ... -->
+    </div>
+
+    <!-- My Courses Section -->
+    <div class="mt-10">
+      <h3 class="text-xl font-bold text-gray-800 mb-4">My Courses</h3>
+      <div id="my-courses" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Cards for educator-created courses will be rendered here -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal for Creating a Course -->
+  <div id="create-course-modal"
+    class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-96">
+      <h3 class="text-xl font-bold mb-4">Create New Course</h3>
+      <form id="create-course-form" class="space-y-3">
+        <input type="text" id="new-title" placeholder="Course Title"
+          class="w-full border p-2 rounded" required>
+        <textarea id="new-description" placeholder="Description"
+          class="w-full border p-2 rounded" required></textarea>
+        <select id="new-level" class="w-full border p-2 rounded">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" id="cancel-create"
+            class="px-4 py-2 text-gray-500 hover:text-gray-700">Cancel</button>
+          <button type="submit"
+            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../../pages/scripts/learners/courses.js"></script>
+  <script src="../../pages/scripts/sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SigniFi - Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 min-h-screen flex">
+
+  <!-- Sidebar -->
+  <div id="container"></div>
+
+  <!-- Main content -->
+  <main class="flex-1 p-8">
+    <!-- Welcome -->
+    <section class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">Welcome back, <span id="learner-name">Learner</span> 👋</h1>
+      <p class="text-gray-500 mt-2">Here’s an overview of your learning journey.</p>
+    </section>
+
+    <!-- Stats cards -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex items-center space-x-4">
+          <i class="fas fa-graduation-cap text-blue-600 text-3xl"></i>
+          <div>
+            <p class="text-gray-500 text-sm">Enrolled Courses</p>
+            <p id="enrolled-count" class="text-2xl font-bold text-gray-800">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex items-center space-x-4">
+          <i class="fas fa-trophy text-yellow-500 text-3xl"></i>
+          <div>
+            <p class="text-gray-500 text-sm">Achievements</p>
+            <p id="achievements-count" class="text-2xl font-bold text-gray-800">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex items-center space-x-4">
+          <i class="fas fa-clock text-green-600 text-3xl"></i>
+          <div>
+            <p class="text-gray-500 text-sm">Hours Learned</p>
+            <p id="hours-count" class="text-2xl font-bold text-gray-800">0</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recommended Courses -->
+    <section>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Recommended for You</h2>
+        <a href="./courses.html" class="text-blue-600 hover:underline text-sm">View all</a>
+      </div>
+      <div id="recommended-courses" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Recommended course cards injected here -->
+      </div>
+    </section>
+  </main>
+
+  <script src="../../pages/scripts/learners/home.js"></script>
+  <script src="../../pages/scripts/learners/sidebar.js"></script>
+</body>
+</html>
