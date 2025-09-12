@@ -4,19 +4,19 @@ let profile = {
     username: "Angela",
     fullName: "Angela Cruz",
     email: "angela@example.com",
-    role: "Learner",
+    role: "Educator",
     location: "Quezon City, Philippines",
     joined: "Jan 15, 2025",
-    badges: ["🏅 Top Learner", "🔥 Consistent", "⭐ 100+ Signs Learned"],
+    badges: ["🏅 Top Educator", "🔥 Consistent", "⭐ 100+ Lessons Added"],
     progress: {
       intro: 90,
       intermediate: 45,
       advanced: 20
     },
     recentActivity: [
-      { text: "✅ Completed lesson FSL Alphabet", time: "2 days ago" },
-      { text: "⭐ Earned badge Consistent Learner", time: "1 week ago" },
-      { text: "📌 Enrolled in Intermediate FSL", time: "2 weeks ago" },
+      { text: "✅ Posted lesson FSL Alphabet", time: "2 days ago" },
+      { text: "⭐ Earned badge Consistent Educator", time: "1 week ago" },
+      { text: "📌 Added Courses in Intermediate FSL", time: "2 weeks ago" },
       { text: "📖 Reviewed Basic Greetings", time: "3 weeks ago" }
     ]
   };
