@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  
+  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils@0.1/control_utils.css" crossorigin="anonymous">
@@ -13,44 +14,54 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.1/hands.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
-  <div id="container"></div>
+<body class="bg-gray-50">
+  <!-- Main layout container -->
+  <div class="flex h-screen">
+    <!-- Sidebar container -->
+    <div id="container"></div>
 
-  <!-- CONTENTS -->
-  <div class="container" style="margin-top: 20px;">
-
-    <div class="columns">
-      
-      <!-- WEBCAM INPUT -->
-      <div class="column">
-        <article class="panel is-info">
-          <p class="panel-heading">
-            Webcam Input
-          </p>
-          <div class="panel-block">
-            <video class="input_video3"></video>
+    <!-- Main content area -->
+    <main class="flex-1 overflow-auto">
+      <div class="container mx-auto p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Sign Language Detection</h2>
+        
+        <div class="columns">
+          
+          <!-- WEBCAM INPUT -->
+          <div class="column">
+            <article class="panel is-info">
+              <p class="panel-heading">
+                Webcam Input
+              </p>
+              <div class="panel-block">
+                <video class="input_video3"></video>
+              </div>
+            </article>
           </div>
-        </article>
-      </div>
 
-      <!-- MEDIAPIPE OUTPUT -->
-      <div class="column">
-        <article class="panel is-info">
-          <p class="panel-heading">
-            Mediapipe Hands Detection
-          </p>
-          <div class="panel-block">
-            <canvas class="output3" width="480px" height="480px"></canvas>
+          <!-- MEDIAPIPE OUTPUT -->
+          <div class="column">
+            <article class="panel is-info">
+              <p class="panel-heading">
+                Mediapipe Hands Detection
+              </p>
+              <div class="panel-block">
+                <canvas class="output3" width="480px" height="480px"></canvas>
+              </div>
+            </article>
           </div>
-        </article>
+        </div>
+        
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
       </div>
-    </div>
-    
-    <div class="loading">
-      <div class="spinner"></div>
-    </div>
+    </main>
+  </div>
+
   <div style="visibility: hidden;" class="control3">
   </div>
+  
   <script src="../pages/scripts/sidebar.js"></script>
   <script type="text/javascript" src="../pages/scripts/hands.js"></script>
 </body>
