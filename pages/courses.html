@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>SigniFi - Courses</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <title>SigniFi - Educator</title>
   <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body class="bg-gray-100 min-h-screen flex">
 
@@ -13,210 +13,154 @@
 
   <!-- Main Content -->
   <main class="flex-1 p-8">
+    <!-- Header -->
     <div class="flex justify-between items-center mb-6">
       <div>
-        <h2 class="text-2xl font-bold text-gray-800">Courses</h2>
-        <p class="text-gray-500 mt-2" id="course-count">All Courses (8)</p>
+        <h2 class="text-2xl font-bold text-gray-800">My Courses</h2>
+        <p class="text-gray-500 mt-2">Create and manage your FSL courses</p>
       </div>
-      
-      <!-- Search Bar -->
-      <div class="flex items-center gap-4">
-        <div class="relative">
+      <button id="addCourseBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+        <span>➕</span>
+        <span>Create Course</span>
+      </button>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+      <div class="flex flex-wrap gap-4 items-center">
+        <div class="flex-1 min-w-64">
           <input 
             type="text" 
-            id="search-input" 
-            placeholder="Search courses..." 
-            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            id="searchInput" 
+            placeholder="Search your courses..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
-          <div class="absolute left-3 top-2.5 text-gray-400">🔍</div>
         </div>
-        
-        <!-- Sort Dropdown -->
-        <select id="sort-select" class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <option value="name">Sort by Name</option>
-          <option value="rating">Sort by Rating</option>
-          <option value="enrolled">Sort by Popularity</option>
-        </select>
+        <div>
+          <select id="levelFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="all">All Levels</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
       </div>
     </div>
-  
-    <!-- Filters -->
-    <div class="flex flex-wrap gap-3 mb-6">
-      <button class="filter-btn px-4 py-2 rounded-full bg-blue-600 text-white text-sm hover:bg-blue-700" data-filter="all">All</button>
-      <button class="filter-btn px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm hover:bg-blue-200" data-filter="beginner">Beginner</button>
-      <button class="filter-btn px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm hover:bg-blue-200" data-filter="intermediate">Intermediate</button>
-      <button class="filter-btn px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm hover:bg-blue-200" data-filter="advanced">Advanced</button>
-    </div>
-  
+
     <!-- Courses Grid -->
-    <div class="courses-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      
-      <!-- Course Card -->
-      <div class="course-card bg-white shadow rounded-xl p-6 hover:shadow-lg transition cursor-pointer" data-level="beginner">
-        <h3 class="text-lg font-semibold">Intro to FSL</h3>
-        <p class="text-gray-500 text-sm mt-2">Basics of Filipino Sign Language including alphabet, greetings, and simple phrases.</p>
-        <div class="flex items-center gap-2 mt-3 text-yellow-400">
-          ⭐⭐⭐⭐☆ <span class="text-gray-400 text-xs">(120 ratings)</span>
-        </div>
-        <p class="text-sm text-gray-400 mt-2" data-enrolled="45">👥 45 enrolled • ⏱️ 6 hrs • Beginner</p>
-        <div class="flex items-center justify-between mt-4">
-          <span class="inline-block px-3 py-1 text-xs bg-green-100 text-green-600 rounded-full">Beginner</span>
-          <button class="enroll-btn px-3 py-1 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700">Enroll</button>
-        </div>
-      </div>
-  
-      <div class="course-card bg-white shadow rounded-xl p-6 hover:shadow-lg transition cursor-pointer" data-level="intermediate">
-        <h3 class="text-lg font-semibold">Intermediate FSL</h3>
-        <p class="text-gray-500 text-sm mt-2">Focuses on conversational fluency, sentence construction, and practical dialogues.</p>
-        <div class="flex items-center gap-2 mt-3 text-yellow-400">
-          ⭐⭐⭐⭐⭐ <span class="text-gray-400 text-xs">(85 ratings)</span>
-        </div>
-        <p class="text-sm text-gray-400 mt-2" data-enrolled="32">👥 32 enrolled • ⏱️ 8 hrs • Intermediate</p>
-        <div class="flex items-center justify-between mt-4">
-          <span class="inline-block px-3 py-1 text-xs bg-yellow-100 text-yellow-600 rounded-full">Intermediate</span>
-          <button class="enroll-btn px-3 py-1 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700">Enroll</button>
-        </div>
-      </div>
-  
-      <div class="course-card bg-white shadow rounded-xl p-6 hover:shadow-lg transition cursor-pointer" data-level="advanced">
-        <h3 class="text-lg font-semibold">Advanced FSL</h3>
-        <p class="text-gray-500 text-sm mt-2">Covers professional-level grammar, academic usage, and cultural context in FSL.</p>
-        <div class="flex items-center gap-2 mt-3 text-yellow-400">
-          ⭐⭐⭐⭐☆ <span class="text-gray-400 text-xs">(60 ratings)</span>
-        </div>
-        <p class="text-sm text-gray-400 mt-2" data-enrolled="18">👥 18 enrolled • ⏱️ 12 hrs • Advanced</p>
-        <div class="flex items-center justify-between mt-4">
-          <span class="inline-block px-3 py-1 text-xs bg-red-100 text-red-600 rounded-full">Advanced</span>
-          <button class="enroll-btn px-3 py-1 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700">Enroll</button>
-        </div>
-      </div>
-  
-      <div class="course-card bg-white shadow rounded-xl p-6 hover:shadow-lg transition cursor-pointer" data-level="beginner">
-        <h3 class="text-lg font-semibold">FSL Grammar Basics</h3>
-        <p class="text-gray-500 text-sm mt-2">Introduction to Filipino Sign Language grammar rules and sentence patterns.</p>
-        <div class="flex items-center gap-2 mt-3 text-yellow-400">
-          ⭐⭐⭐⭐☆ <span class="text-gray-400 text-xs">(42 ratings)</span>
-        </div>
-        <p class="text-sm text-gray-400 mt-2" data-enrolled="25">👥 25 enrolled • ⏱️ 5 hrs • Beginner</p>
-        <div class="flex items-center justify-between mt-4">
-          <span class="inline-block px-3 py-1 text-xs bg-green-100 text-green-600 rounded-full">Beginner</span>
-          <button class="enroll-btn px-3 py-1 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700">Enroll</button>
-        </div>
-      </div>
-  
-      <div class="course-card bg-white shadow rounded-xl p-6 hover:shadow-lg transition cursor-pointer" data-level="beginner">
-        <h3 class="text-lg font-semibold">FSL for Everyday Use</h3>
-        <p class="text-gray-500 text-sm mt-2">Practical signs for shopping, commuting, ordering food, and daily interactions.</p>
-        <div class="flex items-center gap-2 mt-3 text-yellow-400">
-          ⭐⭐⭐⭐⭐ <span class="text-gray-400 text-xs">(97 ratings)</span>
-        </div>
-        <p class="text-sm text-gray-400 mt-2" data-enrolled="50">👥 50 enrolled • ⏱️ 7 hrs • Beginner</p>
-        <div class="flex items-center justify-between mt-4">
-          <span class="inline-block px-3 py-1 text-xs bg-green-100 text-green-600 rounded-full">Beginner</span>
-          <button class="enroll-btn px-3 py-1 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700">Enroll</button>
-        </div>
-      </div>
-  
-      <div class="course-card bg-white shadow rounded-xl p-6 hover:shadow-lg transition cursor-pointer" data-level="advanced">
-        <h3 class="text-lg font-semibold">FSL Storytelling</h3>
-        <p class="text-gray-500 text-sm mt-2">Learn expressive techniques for telling stories and narratives in FSL.</p>
-        <div class="flex items-center gap-2 mt-3 text-yellow-400">
-          ⭐⭐⭐⭐☆ <span class="text-gray-400 text-xs">(33 ratings)</span>
-        </div>
-        <p class="text-sm text-gray-400 mt-2" data-enrolled="15">👥 15 enrolled • ⏱️ 10 hrs • Advanced</p>
-        <div class="flex items-center justify-between mt-4">
-          <span class="inline-block px-3 py-1 text-xs bg-red-100 text-red-600 rounded-full">Advanced</span>
-          <button class="enroll-btn px-3 py-1 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700">Enroll</button>
-        </div>
-      </div>
-  
-      <div class="course-card bg-white shadow rounded-xl p-6 hover:shadow-lg transition cursor-pointer" data-level="intermediate">
-        <h3 class="text-lg font-semibold">FSL for Educators</h3>
-        <p class="text-gray-500 text-sm mt-2">Specialized FSL training for teachers and classroom facilitators.</p>
-        <div class="flex items-center gap-2 mt-3 text-yellow-400">
-          ⭐⭐⭐⭐☆ <span class="text-gray-400 text-xs">(20 ratings)</span>
-        </div>
-        <p class="text-sm text-gray-400 mt-2" data-enrolled="10">👥 10 enrolled • ⏱️ 14 hrs • Intermediate</p>
-        <div class="flex items-center justify-between mt-4">
-          <span class="inline-block px-3 py-1 text-xs bg-yellow-100 text-yellow-600 rounded-full">Intermediate</span>
-          <button class="enroll-btn px-3 py-1 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700">Enroll</button>
-        </div>
-      </div>
-  
-      <div class="course-card bg-white shadow rounded-xl p-6 hover:shadow-lg transition cursor-pointer" data-level="beginner">
-        <h3 class="text-lg font-semibold">FSL Culture & Community</h3>
-        <p class="text-gray-500 text-sm mt-2">Understand Deaf culture, advocacy, and social context of Filipino Sign Language.</p>
-        <div class="flex items-center gap-2 mt-3 text-yellow-400">
-          ⭐⭐⭐⭐⭐ <span class="text-gray-400 text-xs">(15 ratings)</span>
-        </div>
-        <p class="text-sm text-gray-400 mt-2" data-enrolled="8">👥 8 enrolled • ⏱️ 4 hrs • Beginner</p>
-        <div class="flex items-center justify-between mt-4">
-          <span class="inline-block px-3 py-1 text-xs bg-green-100 text-green-600 rounded-full">Beginner</span>
-          <button class="enroll-btn px-3 py-1 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700">Enroll</button>
-        </div>
-      </div>
-  
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="coursesGrid">
+      <!-- Dynamic content will be loaded here -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="text-center py-12 hidden">
+      <div class="text-gray-400 text-6xl mb-4">📚</div>
+      <h3 class="text-xl font-semibold text-gray-600 mb-2">No Courses Created</h3>
+      <p class="text-gray-500 mb-4">Start creating your first FSL course to share your knowledge!</p>
+      <button id="createFirstCourse" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+        Create Your First Course
+      </button>
     </div>
   </main>
   
+  <!-- Modal for Add/Edit Course -->
+  <div id="courseModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-4 max-h-90vh overflow-y-auto">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center p-6 border-b">
+        <h3 id="modalTitle" class="text-xl font-bold text-gray-800">Create New Course</h3>
+        <button id="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+      </div>
+
+      <!-- Modal Form -->
+      <form id="courseForm" class="p-6 space-y-4">
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Course Title</label>
+          <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Enter course title"
+          >
+        </div>
+
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <textarea 
+            id="description" 
+            name="description" 
+            required
+            rows="3"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Describe what students will learn"
+          ></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="level" class="block text-sm font-medium text-gray-700 mb-2">Level</label>
+            <select 
+              id="level" 
+              name="level" 
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Select level</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="duration" class="block text-sm font-medium text-gray-700 mb-2">Duration</label>
+            <input 
+              type="text" 
+              id="duration" 
+              name="duration" 
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="e.g., 6 hrs"
+            >
+          </div>
+        </div>
+
+        <div>
+          <label for="instructor" class="block text-sm font-medium text-gray-700 mb-2">Instructor Name</label>
+          <input 
+            type="text" 
+            id="instructor" 
+            name="instructor" 
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Your name or instructor name"
+          >
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="flex justify-end space-x-3 pt-4 border-t">
+          <button 
+            type="button" 
+            id="cancelBtn"
+            class="px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+          >
+            Save Course
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../pages/scripts/educator.js"></script>
   <script src="../pages/scripts/home.js"></script>
-  <script src="../pages/scripts/courses.js"></script>
   <script src="../pages/scripts/sidebar.js"></script>
-  
-  <script>
-    // Initialize search and sort functionality when DOM is loaded
-    document.addEventListener('DOMContentLoaded', function() {
-      // Initialize search
-      const searchInput = document.getElementById('search-input');
-      if (searchInput) {
-        searchInput.addEventListener('input', function() {
-          const searchTerm = this.value.toLowerCase();
-          const courseCards = document.querySelectorAll('.course-card');
-          
-          courseCards.forEach(card => {
-            const title = card.querySelector('h3').textContent.toLowerCase();
-            const description = card.querySelector('p').textContent.toLowerCase();
-            
-            if (title.includes(searchTerm) || description.includes(searchTerm)) {
-              card.style.display = 'block';
-            } else {
-              card.style.display = 'none';
-            }
-          });
-        });
-      }
-      
-      // Initialize sort functionality
-      const sortSelect = document.getElementById('sort-select');
-      if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
-          sortCourses(this.value);
-        });
-      }
-    });
-    
-    function sortCourses(sortBy) {
-      const coursesContainer = document.querySelector('.courses-grid');
-      const courseCards = Array.from(document.querySelectorAll('.course-card'));
-      
-      courseCards.sort((a, b) => {
-        switch(sortBy) {
-          case 'name':
-            return a.querySelector('h3').textContent.localeCompare(b.querySelector('h3').textContent);
-          case 'enrolled':
-            const aEnrolled = parseInt(a.querySelector('[data-enrolled]')?.getAttribute('data-enrolled') || '0');
-            const bEnrolled = parseInt(b.querySelector('[data-enrolled]')?.getAttribute('data-enrolled') || '0');
-            return bEnrolled - aEnrolled;
-          default:
-            return 0;
-        }
-      });
-      
-      // Re-append sorted cards
-      courseCards.forEach(card => {
-        coursesContainer.appendChild(card);
-      });
-    }
-  </script>
 </body>
 </html>
