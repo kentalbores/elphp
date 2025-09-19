@@ -1,0 +1,228 @@
+/* --- Global Styles & Color Palette --- */
+:root {
+  --bg-dark: #081825;
+  --bg-input: #1a2a41;
+  --text-primary: #ffffff;
+  --text-secondary: #8a9cb2;
+  --accent-blue: #3661f2;
+  --border-color: #293952;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+}
+
+/* --- Main Two-Column Layout --- */
+.signup-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+}
+
+/* --- Left Panel (Informational) --- */
+.info-panel-signup {
+  width: 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem;
+  box-sizing: border-box;
+}
+.info-content-signup {
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-left: 30px;
+}
+
+.logo-img{
+  width: 35px;
+  height: 35px;
+}
+.logo-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.logo-header h2 {
+  font-size: 1.4rem;
+  margin: 0;
+  font-weight: 500;
+  color: #BEDBFF;
+
+}
+
+.highlight {
+  color: var(--accent-blue);
+}
+.tagline {
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 2.5rem;
+}
+
+.feature-list-signup {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  font-size: 1rem;
+  color: #cdd6e3;
+}
+.feature-list-signup li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.signin-prompt {
+  color: white;
+}
+.signin-prompt a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* --- Right Panel (Form) --- */
+.form-panel-signup {
+  width: 55%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  box-sizing: border-box;
+  margin-right: 30px;
+}
+.form-content-signup {
+  width: 100%;
+  max-width: 500px;
+}
+.form-content-signup h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+}
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+}
+.input-group {
+  margin-bottom: 1rem;
+  flex: 1;
+}
+.input-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  margin-left: 5px;
+}
+
+#role {
+  padding-left: 1rem; /* moves the text inside to the right */
+  height: 2.5rem;       /* optional: match other input height */
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  font-size: .88rem;
+}
+
+
+.signup-form input[type="text"],
+.signup-form input[type="email"],
+.signup-form input[type="password"],
+.signup-form select {
+  width: 100%;
+  padding: 0.6rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-size: .85rem;
+  font-weight: 400;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+.signup-form select {
+  appearance: none;
+}
+
+.signup-form input::placeholder {
+    font-size: .9rem;
+  color: #5a6b82;
+}
+.signup-form input:focus,
+.signup-form select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+.input-field-password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-field-password input {
+  padding-right: 3rem;
+}
+.visibility-toggle {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.terms-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.7rem;
+  margin-left: 10px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.btn-create-account {
+  background-color: var(--accent-blue);
+  color: var(--text-primary);
+  padding: 0.8rem;
+  border-radius: 30px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-create-account:hover {
+  background-color: #254edb;
+  transform: translateY(-2px);
+}
+
+/* --- Responsive adjustments --- */
+@media (max-width: 1024px) {
+  .info-panel-signup {
+    display: none;
+  }
+  .form-panel-signup {
+    width: 100%;
+    margin-right: 0;
+  }
+}

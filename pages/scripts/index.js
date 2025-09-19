@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("form");
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
+  const togglePassword = document.getElementById("togglePassword");
 
   if (form) {
     form.addEventListener("submit", (e) => {
@@ -25,6 +26,18 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         alert("User not found. Please create an account.");
       }
+    });
+  }
+
+  // ✅ Password visibility toggle
+  if (togglePassword && passwordInput) {
+    togglePassword.addEventListener("click", () => {
+      const type =
+        passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+
+      togglePassword.innerHTML =
+        type === "password" ? "&#128065;" : "&#128584;"; 
     });
   }
 });

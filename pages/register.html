@@ -4,163 +4,103 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SigniFi - Create Account</title>
-  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles/register.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
 </head>
-<body class="min-h-screen flex">
+<body>
 
-  <div class="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 text-white flex-col items-center justify-center p-12">
-    <img src="../assets/logo.svg" alt="SigniFi Logo" class="w-20 h-20 mb-6">
-
-    <h1 class="text-4xl font-extrabold mb-2">SigniFi</h1>
-    <p class="text-lg text-blue-100 mb-8">Filipino Sign Language Learning Platform</p>
-
-    <div class="space-y-6 text-left w-full max-w-md">
-      <div class="flex items-start space-x-3">
-        <span class="text-green-400 text-xl">🎓</span>
-        <div>
-          <h3 class="font-semibold text-white">Start Learning Today</h3>
-          <p class="text-sm text-blue-100">Join thousands of learners mastering FSL</p>
-        </div>
+<div class="signup-container">
+  <!-- Left Panel -->
+  <div class="info-panel-signup">
+    <div class="info-content-signup">
+      <div class="logo-header">
+        <img src="../assets/logo.svg" alt="SigniFi Logo" class="logo-img">
+        <h2>SigniFi</h2>
       </div>
 
-      <div class="flex items-start space-x-3">
-        <span class="text-yellow-400 text-xl">👥</span>
-        <div>
-          <h3 class="font-semibold text-white">Connect with Community</h3>
-          <p class="text-sm text-blue-100">Learn alongside fellow FSL enthusiasts</p>
-        </div>
-      </div>
+      <h1 class="tagline">
+        Empower <span class="highlight">learning and inclusivity</span> — start your SigniFi journey today.
+      </h1>
 
-      <div class="flex items-start space-x-3">
-        <span class="text-blue-300 text-xl">🏆</span>
-        <div>
-          <h3 class="font-semibold text-white">Track Your Progress</h3>
-          <p class="text-sm text-blue-100">Monitor your learning journey and achievements</p>
-        </div>
-      </div>
+      <ul class="feature-list-signup">
+        <li><i class="fa-solid fa-video"></i> Interactive Video Lessons</li>
+        <li><i class="fa-solid fa-bullseye"></i> Real-Time Gesture Recognition</li>
+        <li><i class="fa-solid fa-chart-line"></i> Comprehensive Analytics</li>
+      </ul>
+
+      <p class="signin-prompt">
+        — Already have an Account? <a href="../index.html">Sign in</a>
+      </p>
     </div>
   </div>
 
-  <div class="flex w-full lg:w-1/2 items-center justify-center bg-gray-50">
-    <div class="bg-white p-10 rounded-xl shadow-md w-full max-w-md">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Create Your Account</h2>
-      
-      <!-- Error/Success Messages -->
-      <div id="messageContainer" class="hidden mb-4 p-3 rounded-lg text-sm"></div>
-      
-      <form id="registerForm" class="space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-            <input id="firstName" name="firstName" type="text" required placeholder="John"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+  <!-- Right Panel -->
+  <div class="form-panel-signup">
+    <div class="form-content-signup">
+      <h2>Create account <span class="highlight">.</span></h2>
+
+      <form id="registerForm" class="signup-form" action="register_action.php" method="POST">
+        <div class="form-row">
+          <div class="input-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" placeholder="Enter first name" required>
           </div>
-          <div>
-            <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-            <input id="lastName" name="lastName" type="text" required placeholder="Doe"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <div class="input-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Enter last name" required>
           </div>
         </div>
 
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-          <input id="email" name="email" type="email" required placeholder="john.doe@example.com"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <div class="input-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="Enter Email Address" required>
         </div>
 
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-          <div class="relative">
-            <input type="password" id="password" name="password" required placeholder="Create a strong password"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          </div>
-          <div class="mt-2">
-            <div class="flex items-center space-x-2 text-xs">
-              <div id="lengthCheck" class="flex items-center space-x-1">
-                <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
-                <span class="text-gray-500">8+ characters</span>
-              </div>
-              <div id="uppercaseCheck" class="flex items-center space-x-1">
-                <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
-                <span class="text-gray-500">Uppercase</span>
-              </div>
-              <div id="numberCheck" class="flex items-center space-x-1">
-                <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
-                <span class="text-gray-500">Number</span>
-              </div>
-            </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <div class="input-field-password">
+            <input type="password" id="password" name="password" placeholder="Create Strong Password" required>
+            <button type="button" id="togglePassword" class="visibility-toggle"><i class="fa-solid fa-eye"></i></button>
           </div>
         </div>
 
-        <div>
-          <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-          <div class="relative">
-            <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          </div>
-          <p id="passwordMatch" class="text-xs mt-1 text-gray-500"></p>
-        </div>
-
-        <div>
-          <label for="role" class="block text-sm font-medium text-gray-700 mb-1">I am a:</label>
-          <select id="role" name="role" required
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <!-- Role Selector -->
+        <div class="input-group">
+          <label for="role">I am a:</label>
+          <select id="role" name="role" required>
             <option value="">Select your role</option>
             <option value="student">Student - I want to learn FSL</option>
             <option value="teacher">Teacher - I want to create FSL courses</option>
           </select>
         </div>
 
-        <div class="flex items-start space-x-2">
-          <input type="checkbox" id="terms" name="terms" required
-            class="mt-1 form-checkbox text-blue-600 border-gray-300 rounded">
-          <label for="terms" class="text-sm text-gray-600">
-            I agree to the <a href="#" class="text-blue-600 hover:underline">Terms of Service</a> 
-            and <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a>
+        <div class="terms-group">
+          <input type="checkbox" id="terms" name="terms" required>
+          <label for="terms">
+            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
           </label>
         </div>
 
-        <div class="flex items-start space-x-2">
-          <input type="checkbox" id="newsletter" name="newsletter"
-            class="mt-1 form-checkbox text-blue-600 border-gray-300 rounded">
-          <label for="newsletter" class="text-sm text-gray-600">
-            Send me updates about new features and learning resources
-          </label>
-        </div>
-
-        <button type="submit" id="registerBtn"
-          class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
-          Create Account
-        </button>
+        <button type="submit" class="btn-create-account">Create Account</button>
       </form>
-
-      <p class="text-sm text-center text-gray-500 mt-6">
-        Already have an account?
-        <a href="../index.html" class="text-blue-600 hover:underline">Sign In</a>
-      </p>
-
-      <div class="flex items-center my-6">
-        <hr class="flex-grow border-gray-300">
-        <span class="px-3 text-gray-400 text-sm">or continue with</span>
-        <hr class="flex-grow border-gray-300">
-      </div>
-
-      <div class="space-y-3">
-        <button id="googleRegister"
-          class="w-full border border-red-500 text-red-600 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-red-50 transition">
-          <img src="../assets/google.svg" alt="Google Logo" class="w-5 h-5">
-          <span>Continue with Google</span>
-        </button>
-        <button id="facebookRegister"
-          class="w-full border border-blue-500 text-blue-600 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-blue-50 transition">
-          <img src="../assets/facebook.svg" alt="Facebook Logo" class="w-5 h-5">
-          <span>Continue with Facebook</span>
-        </button>
-      </div>
     </div>
   </div>
-  
-  <script src="../pages/scripts/auth.js"></script>
+</div>
+
+<script>
+  // Password toggle
+  const passwordInput = document.getElementById('password');
+  const toggleBtn = document.getElementById('togglePassword');
+  toggleBtn.addEventListener('click', () => {
+    if(passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      toggleBtn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+    } else {
+      passwordInput.type = 'password';
+      toggleBtn.innerHTML = '<i class="fa-solid fa-eye"></i>';
+    }
+  });
+</script>
+
 </body>
 </html>
